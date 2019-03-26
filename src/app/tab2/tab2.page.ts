@@ -1,3 +1,14 @@
+/*
+ * Tab 2 - Search
+ *
+ * Functions:
+ * * Search database for a UI
+ * * View UI in detail view and save it
+ *
+ * Routes:
+ * * UIDetailView
+ */
+
 import { Component } from '@angular/core';
 
 @Component({

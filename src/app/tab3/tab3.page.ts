@@ -1,3 +1,15 @@
+/*
+ * Tab 3 - Settings
+ *
+ * Functions:
+ * * Change BLE settings
+ * * Change user settings
+ * * Sign out
+ *
+ * Routes:
+ * 
+ */
+
 import { Component } from '@angular/core';
 
 @Component({
