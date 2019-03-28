@@ -1,9 +1,41 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>addUI1</ion-title>
+      <ion-button fill="clear" slot="start" (click)="goBack()">
+          <ion-icon name="arrow-round-back"></ion-icon>
+      </ion-button>
+    <ion-title>New UI</ion-title>
   </ion-toolbar>
+  
 </ion-header>
 
 <ion-content>
 
+    <ion-item>
+        <ion-label position="fixed" clearInput>UI Name: </ion-label>
+        <ion-input [(ngModel)]="ui_data.name"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="fixed" clearInput>Description: </ion-label>
+        <ion-input [(ngModel)]="ui_data.description"></ion-input>
+    </ion-item>
+    <ion-item>
+          <ion-label>Encoding Protocol</ion-label>
+          <ion-select [(ngModel)]="ui_data.encoding" [interfaceOptions]="customActionSheetOptions" interface="action-sheet" placeholder="Select One">
+            <ion-select-option value="p1">P1</ion-select-option>
+            <ion-select-option value="p2">P2</ion-select-option>
+            <ion-select-option value="p3">P3</ion-select-option>
+          </ion-select>
+    </ion-item>
+    <ion-item>
+        <ion-label>Publish?</ion-label>
+        <ion-checkbox checked="false"></ion-checkbox>
+    </ion-item>
+    
+    <div style="text-align: center; margin-top: 25px" >
+        <ion-button (click)="goUI2()">
+            Continue
+        </ion-button>
+    </div>
+    
+    
 </ion-content>

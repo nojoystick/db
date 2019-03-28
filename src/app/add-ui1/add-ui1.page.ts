@@ -13,6 +13,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-ui1',
@@ -21,9 +22,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddUI1Page implements OnInit {
 
-  constructor() { }
+  ui_data = {
+    name: '',
+    description: '', 
+    encoding: ''
+  }
+  constructor(public router:Router) { }
 
   ngOnInit() {
+    
   }
 
+  goBack(){
+    this.router.navigate(["/tab1"]);
+  }
+
+  goUI2(){
+    //console.log(this.ui_data);
+    this.router.navigate(["/add-ui2"]);
+  }
 }
