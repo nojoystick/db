@@ -1,9 +1,31 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>UI</ion-title>
+    <ion-button float-left (click)="goBack()">
+    <ion-icon name="arrow-back"></ion-icon>
+    </ion-button>
+    <ion-title>{{UI.getName()}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+<ion-grid fixed>
+  <ion-row *ngFor = "let row of rows">
+    <ion-col align-self-stretch *ngFor="let col of cols" size="{{this.sizes[row][col]}}*3">
+        <div *ngFor = "let obj of objects">
+        <div *ngIf="obj.getRow() == row && obj.getCol() == col">
+        <div *ngIf="{type: obj.getType(), channel: obj.getChannel(), value: obj.getValue()}; let v">
 
+    	  <ion-range  min="v.value" max="obj.getMaxVal()" (ionChange)="handler(v.channel, $event.target.value)" *ngIf="v.type == 'slider'"></ion-range>
+
+        <ion-button style="width:100%" (click)="handler(v.channel, v.value)" *ngIf="v.type == 'button'">{{obj.getChannel()}}</ion-button>
+
+        <ion-toggle (ionChange)="handler(v.channel, v.value)" *ngIf="v.type == 'switch'"></ion-toggle>
+
+        <div style="height:100%" *ngIf="v.type == 'spacer'"></div>
+        </div>
+        </div>
+        </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>
 </ion-content>

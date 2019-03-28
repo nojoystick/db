@@ -12,6 +12,7 @@
  */
 
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab1',
@@ -20,7 +21,14 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
 
-
+  constructor(
+      private router: Router)
+  {
+  }
+  openUIPage()
+  {
+  	this.router.navigate(["/ui"]);
+  }
 
 
 }
