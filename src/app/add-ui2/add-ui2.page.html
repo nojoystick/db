@@ -10,8 +10,8 @@
 <ion-content>
 
   <ion-grid class="grid" fixed>
-    <ion-row id="rows" style="background-color: green" *ngFor = "let row of rows" > 1
-      <ion-col id="cols" align-self-stretch  style="background-color: gold"  *ngFor="let col of cols" size-lg dragula="items">
+    <ion-row id="rows" padding style="margin-top: 5px;background-color: green" *ngFor = "let row of rows"> 
+      <ion-col id="cols"   style="margin: 5px;background-color: gold"  *ngFor="let col of cols" size-xl dragula="items">
          
 
           
@@ -37,9 +37,12 @@
             <ion-range min="0" max="100" pin="true" color="secondary">
                 <ion-label slot="start">0</ion-label>
                 <ion-label slot="end">100</ion-label>
-              </ion-range>
+            </ion-range>
             
             
         </ion-fab-list>
     </ion-fab>
+    <ion-toolbar>
+
+    </ion-toolbar>
   </ion-footer>
