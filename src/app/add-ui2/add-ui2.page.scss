@@ -6,4 +6,15 @@
 
 .grid{
     height: 100%;
+    display: flex;
+    flex-flow: column;
+}
+ion-content {
+    --overflow: hidden;
+}
+
+#foo{
+    
+    margin-right: 15px;
+    background-color: gold;
 }

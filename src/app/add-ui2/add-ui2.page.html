@@ -7,25 +7,31 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content >
 
   <ion-grid class="grid" fixed>
-    <ion-row id="rows" padding style="margin-top: 5px;background-color: green" *ngFor = "let row of rows"> 
-      <ion-col id="cols"   style="margin: 5px;background-color: gold"  *ngFor="let col of cols" size-xl dragula="items">
-         
-
-          
+    <ion-row id="rows" padding style="flex-grow: 0.5" *ngFor = "let row of rows"> 
+      
+      <ion-col id="cols"   *ngFor="let col of cols" dragula="items">
       </ion-col>
     </ion-row>
   </ion-grid>
+      
   
+  <ion-list  *ngIf="hide" style="width: 50%; position:absolute;bottom: 0;">
+    <div id="fab" *ngFor="let obj of objects" dragula="items">
+            <ion-range *ngIf="obj.getType() == 'slider'"></ion-range>
 
-
+            <ion-button style="width:100%" *ngIf="obj.getType() == 'button'">Button</ion-button>
+    
+            <ion-toggle *ngIf="obj.getType() == 'switch'"></ion-toggle>
+    </div>
+  </ion-list>
 </ion-content>
 
 <ion-footer>
   
-    <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <!-- <ion-fab vertical="bottom" horizontal="start" slot="fixed">
         <ion-fab-button>
           <ion-icon name="add"></ion-icon>
         </ion-fab-button>
@@ -41,8 +47,9 @@
             
             
         </ion-fab-list>
-    </ion-fab>
+    </ion-fab> -->
     <ion-toolbar>
-
+      <ion-button (click)="ngIfCtrl()"><ion-icon name="add"></ion-icon></ion-button>
+      
     </ion-toolbar>
   </ion-footer>
