@@ -9,4 +9,37 @@
 
 <ion-content>
 
+  <ion-grid class="grid" fixed>
+    <ion-row id="rows" style="background-color: green" *ngFor = "let row of rows" > 1
+      <ion-col id="cols" align-self-stretch  style="background-color: gold"  *ngFor="let col of cols" size-lg dragula="items">
+         
+
+          
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+
+
 </ion-content>
+
+<ion-footer>
+  
+    <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+        <ion-fab-button>
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list id="fab" dragula="items" side="top">
+            <ion-button>
+              Button
+            </ion-button>
+            <ion-toggle color="danger" checked></ion-toggle>
+            <ion-range min="0" max="100" pin="true" color="secondary">
+                <ion-label slot="start">0</ion-label>
+                <ion-label slot="end">100</ion-label>
+              </ion-range>
+            
+            
+        </ion-fab-list>
+    </ion-fab>
+  </ion-footer>
