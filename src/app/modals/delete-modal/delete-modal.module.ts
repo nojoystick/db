@@ -1,17 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { UIPage } from './ui.page';
-import { DeleteModalPage } from '../modals/delete-modal/delete-modal.page';
+import { DeleteModalPage } from './delete-modal.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: UIPage
+    component: DeleteModalPage
   }
 ];
 
@@ -19,11 +18,9 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [UIPage, DeleteModalPage,],
-  entryComponents: [DeleteModalPage]
+  declarations: [DeleteModalPage]
 })
-export class UIPageModule {}
+export class DeleteModalPageModule {}
