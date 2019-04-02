@@ -34,7 +34,7 @@ export class AddUI1Page implements OnInit {
   }
 
   goBack(){
-    this.router.navigate(["/tab1"]);
+    this.router.navigate(["/tabs/tab1"]);
   }
 
   goUI2(){

@@ -1,0 +1,20 @@
+#fab{
+    // width: 500px !important;
+    // height: 150px !important;
+    background-color: rgb(219, 210, 210);
+}
+
+.grid{
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+}
+ion-content {
+    --overflow: hidden;
+}
+
+#foo{
+    
+    margin-right: 15px;
+    background-color: gold;
+}
