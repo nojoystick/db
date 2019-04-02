@@ -6,6 +6,9 @@ import { SliderService } from './slider.service';
 import { SwitchService } from './switch.service';
 import { SpacerService } from './spacer.service';
 
+import * as firebase from 'firebase';
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,16 +17,31 @@ export class UIService {
 _name:string;
 _isPublic:boolean;
 _objects:Array<ObjectService> = [];
+NUM_ROWS:number = 8;
+NUM_COLS:number = 4;
 
   constructor(name:string, isPublic:boolean) 
   { 
     this._name = name;
     this._isPublic = isPublic;
+    //default: fill with spacers
+    for(var i = 1; i <= this.NUM_ROWS; i++)
+      for(var j = 1; j <= this.NUM_COLS; j++)
+        this.objectFactory("spacer", i, j, 1, 1);
   }
 
   addObject(obj:ObjectService, row:number, col:number)
   {
+    //overwrite old object at this position
     obj.setPos(row, col);
+    for(var i = 0; i < this._objects.length; i++)
+    {
+      if(( this._objects[i].getRow() == row) && (this._objects[i].getCol() == col) )
+      {
+        this._objects[i] = obj;
+        return;
+      }
+    }
     this._objects.push(obj);
   }
 
@@ -36,26 +54,27 @@ _objects:Array<ObjectService> = [];
     }
   }
 
-  objectFactory(type:string, row:number, col:number, channel:number, value:number): void;
-  objectFactory(type:string, row:number, col:number, channel:number, value:number, maxVal:number): void;
-
-  objectFactory(type:string, row:number, col:number, channel:number, value:number, maxVal?:number)
+  objectFactory(type:string, row:number, col:number, channel:number, value:number, value2?:number)
   {
-    // this is as close as you can get to an overloaded method in typescript :-(
     var obj:ObjectService;
-    if(maxVal != null)
+
+    // approximating method overloading in typescript
+    // if it's a switch (two values):
+    if(value2 != null)
     {
-      obj = new SliderService(channel, value, maxVal);
+      obj = new SwitchService(channel, value, value2)
     }
+    
+    // if it's a 1 val object:
     else
     {
     switch(type)
     {
+      case("slider"):
+          obj = new SliderService(channel, value);
+      break;
     	case("button"):
         obj = new ButtonService(channel, value);
-    	break;
-    	case("switch"):
-        obj = new SwitchService(channel, value);
     	break;
     	case("spacer"):
         // channel and value here are used for width/height
@@ -74,17 +93,8 @@ _objects:Array<ObjectService> = [];
     return retItems;
   }
 
-  getObjects()
-  {
-  	return this._objects;
-  	for(var i:number = 0; i < this._objects.length; i++)
-  	{
-  		console.log(this._objects[i].getDrawVals());
-  	}
-  }
+  getObjects(){ return this._objects; }
+  getName(){ return this._name; }
+  getPublic(){ return this._isPublic; }
 
-  getName()
-  {
-  	return this._name;
-  }
 }
