@@ -31,4 +31,7 @@ export class Tab1Page {
   }
 
 
+  addUI(){
+    this.router.navigate(["/add-ui1"]);
+  }
 }
