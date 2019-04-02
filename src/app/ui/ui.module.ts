@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { UIPage } from './ui.page';
+import { DeleteModalPage } from '../modals/delete-modal/delete-modal.page';
 
 const routes: Routes = [
   {
@@ -22,6 +23,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [UIPage]
+  declarations: [UIPage, DeleteModalPage,],
+  entryComponents: [DeleteModalPage]
 })
 export class UIPageModule {}

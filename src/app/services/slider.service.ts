@@ -5,15 +5,17 @@ import { ObjectService } from './object.service';
   providedIn: 'root'
 })
 export class SliderService extends ObjectService {
-private _maxVal:number;
-  constructor(channel:number, value:number, maxVal:number) 
+  constructor(channel:number, value?:number) 
   { 
     var type = "slider";
   	var sliderWidth = 4;
     var sliderHeight = 1;
-    super(type, sliderWidth, sliderHeight, channel, value);
-    this._maxVal = maxVal;
-  }
 
-  getMaxVal(){ return this._maxVal; }
+    // All slider objects will transmit range 0 - 1024,
+    // mimicking the behavior of a hardware pot
+    if(value == null)
+      var value = 0;
+    
+    super(type, sliderWidth, sliderHeight, channel, value);
+  }
 }
