@@ -5,12 +5,9 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { DeleteModalPage } from './delete-modal.page';
-
 const routes: Routes = [
   {
     path: '',
-    component: DeleteModalPage
   }
 ];
 
@@ -21,6 +18,5 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [DeleteModalPage]
 })
 export class DeleteModalPageModule {}
