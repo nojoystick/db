@@ -25,6 +25,8 @@ import { ButtonService } from '../services/button.service';
 import { SwitchService } from '../services/switch.service';
 import { SliderService } from '../services/slider.service';
 import { Subscription } from 'rxjs';
+import { AlertController } from '@ionic/angular';
+import { async } from 'q';
 
 @Component({
   selector: 'app-add-ui2',
@@ -33,27 +35,35 @@ import { Subscription } from 'rxjs';
 })
 export class AddUI2Page implements OnInit {
 
-  listofItems:any=[];
+  currObjectContainer:Array<any> = [];
   subs = new Subscription();
   objects:Array<ObjectService> = [];
   rows:Array<number> = [1, 2, 3, 4, 5, 6, 7, 8];
   cols:Array<number> = [1, 2, 3, 4];
   hide:boolean = false;
   iontype:string = '';
-  constructor(public router:Router, private dragulaService: DragulaService, private toastController: ToastController) {
+  UI:UIService;
+  isDropped:boolean = false;
+  toggleData: any; 
+  
+  constructor(public router:Router, private dragulaService: DragulaService, private toastController: ToastController, private alertCtrl: AlertController) {
 
     
     this.objects.push(new ButtonService(0, 0));
-    this.objects.push(new SwitchService(0, 0));
-    this.objects.push(new SliderService(0, 0,0));
+    this.objects.push(new SwitchService(0, 0, 0));
+    this.objects.push(new SliderService(0, 0));
+
+
+    this.UI = new UIService("Test", false);
+
 
     this.dragulaService.createGroup('items', {
       copy: (el, source) => {
-        // console.log(el.children.);
-
+        
         
         this.iontype = el.tagName;
-        console.log(this.iontype);
+        this.isDropped = false;
+        
         return source.id === 'fab';
       },
       accepts: (el, target, source, sibling) => {
@@ -64,22 +74,168 @@ export class AddUI2Page implements OnInit {
     });
     
     this.subs.add(dragulaService.drop("items")
-      .subscribe(({ el }) => {
-       // this.iontype = '';
+      .subscribe(({ el, target }) => {
+      
+       if(target != null){ // In case it drops in 'fab' id
+        this.isDropped = true;
+        this.hide = false;
+        
+        //  console.log("YEET" + target.id + "ROW: " + target.parentElement.id);
+        
+        
+        if(el.tagName == "ION-TOGGLE"){
+          if(el.getAttribute("tag") == null){ // New Button/Toggle
+              let randomId = Math.floor(Math.random() * 100);
+              this.presentTogglePrompt(randomId ,"toggle", parseInt(target.parentElement.id), parseInt(target.id));
+              
+              el.setAttribute("tag", String(randomId));
+              
+              
+              console.log(this.currObjectContainer);
+              
+            }
+          else{ // After you place it, and if you want to move it again, changed rows and col will be updated.
+            this.currObjectContainer.forEach(data=>{
+              if(el.getAttribute("tag") == data.id){ 
+                if(target.id != data.col || target.parentElement.id != data.row){
+                  data.col = target.id;
+                  data.row = target.parentElement.id;
+                }
+              }
+            });
+            console.log(this.currObjectContainer);
+          }
+
+        } ///////////// BELOW IS BUTTONS AND SLIDER ABOVE IS TOGGLE
+        else{
+          if(el.getAttribute("tag") == null){
+            let randomId = Math.floor(Math.random() * 600)+100;
+            this.presentAlertPrompt(randomId ,el.tagName == "ION-BUTTON" ? "button": "slider", parseInt(target.parentElement.id), parseInt(target.id));
+            el.setAttribute("tag", String(randomId));
+            console.log(this.currObjectContainer);
+            //
+            }
+          else{
+            this.currObjectContainer.forEach(data=>{
+              if(el.getAttribute("tag") == data.id){ 
+                if(target.id != data.col || target.parentElement.id != data.row){
+                  data.col = target.id;
+                  data.row = target.parentElement.id;
+                }
+              }
+            });
+            console.log(this.currObjectContainer);
+          }
+        }
+      }
       })
+      
     );
 
     
    }
-   
+  
+   async presentAlertPrompt(randomId:number, type:string, row:number, col:number) {
+    const alert = await this.alertCtrl.create({
+      header: 'Enter Channel&Value',
+      inputs: [
+        {
+          name: 'Channel',
+          type: 'text',
+          placeholder: 'Channel'
+        },
+        {
+          name: 'Value',
+          type: 'text',
+          value: '',
+          placeholder: 'Value'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Ok',
+          handler: (data) => {
+            console.log('Confirm Ok');
+            this.currObjectContainer.push({id:randomId, type: type, row: row, col: col, channel: data.Channel, value: data.Value});
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+  async presentTogglePrompt(randomId:number, type:string, row:number, col:number) {
+    const alert = await this.alertCtrl.create({
+      header: 'Enter Channel&Value',
+      inputs: [
+        {
+          name: 'Channel',
+          type: 'text',
+          placeholder: 'Channel'
+        },
+        {
+          name: 'Value',
+          type: 'text',
+          value: '',
+          placeholder: 'Value1'
+        },
+        {
+          name: 'Value2',
+          type: 'text',
+          value: '',
+          placeholder: 'Value2'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Ok',
+          handler: (data) => {
+            console.log('Confirm Ok');
+            
+            this.currObjectContainer.push({id:randomId, type: type, row: row, col: col, channel: data.Channel, value: data.Value, value2: data.Value2});
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 
+  
   ngOnInit() {
+    
   }
 
   goBack(){
     this.router.navigate(["/add-ui1"]);
   }
-  
+ 
+  publish(){
+    this.currObjectContainer.forEach(data=>{
+      if(data.type == "toggle"){
+        this.UI.objectFactory(data.type, data.row, data.col, data.channel, data.value, data.value2);
+        
+      }
+      else{
+        this.UI.objectFactory(data.type, data.row, data.col, data.channel, data.value);
+        
+      }
+    })
+    console.log(this.UI.getObjects());
+
+  }
   ngIfCtrl(){
     this.hide = !this.hide;
   }
