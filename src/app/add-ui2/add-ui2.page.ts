@@ -45,6 +45,7 @@ export class AddUI2Page implements OnInit {
   UI:UIService;
   isDropped:boolean = false;
   toggleData: any; 
+  
   constructor(public router:Router, private dragulaService: DragulaService, private toastController: ToastController, private alertCtrl: AlertController) {
 
     
@@ -53,7 +54,7 @@ export class AddUI2Page implements OnInit {
     this.objects.push(new SliderService(0, 0));
 
 
-    this.UI = new UIService("Sample", false);
+    this.UI = new UIService("Test", false);
 
 
     this.dragulaService.createGroup('items', {
@@ -91,28 +92,40 @@ export class AddUI2Page implements OnInit {
               
               
               console.log(this.currObjectContainer);
-              // if(this.currObjectContainer.length > 0) {console.log(this.currObjectContainer);}
-              //
+              
+            }
+          else{ // After you place it, and if you want to move it again, changed rows and col will be updated.
+            this.currObjectContainer.forEach(data=>{
+              if(el.getAttribute("tag") == data.id){ 
+                if(target.id != data.col || target.parentElement.id != data.row){
+                  data.col = target.id;
+                  data.row = target.parentElement.id;
+                }
+              }
+            });
+            console.log(this.currObjectContainer);
+          }
+
+        } ///////////// BELOW IS BUTTONS AND SLIDER ABOVE IS TOGGLE
+        else{
+          if(el.getAttribute("tag") == null){
+            let randomId = Math.floor(Math.random() * 600)+100;
+            this.presentAlertPrompt(randomId ,el.tagName == "ION-BUTTON" ? "button": "slider", parseInt(target.parentElement.id), parseInt(target.id));
+            el.setAttribute("tag", String(randomId));
+            console.log(this.currObjectContainer);
+            //
             }
           else{
             this.currObjectContainer.forEach(data=>{
-              if(el.getAttribute("tag") == data.id){
+              if(el.getAttribute("tag") == data.id){ 
                 if(target.id != data.col || target.parentElement.id != data.row){
-                  console.log("WTF");
+                  data.col = target.id;
+                  data.row = target.parentElement.id;
                 }
               }
-            })
+            });
+            console.log(this.currObjectContainer);
           }
-
-        }
-        else{
-          if(el.getAttribute("tag") == null){
-            
-            this.presentAlertPrompt();
-            el.setAttribute("tag", "true");
-            
-            //
-            }
         }
       }
       })
@@ -122,7 +135,7 @@ export class AddUI2Page implements OnInit {
     
    }
   
-   async presentAlertPrompt() {
+   async presentAlertPrompt(randomId:number, type:string, row:number, col:number) {
     const alert = await this.alertCtrl.create({
       header: 'Enter Channel&Value',
       inputs: [
@@ -150,8 +163,7 @@ export class AddUI2Page implements OnInit {
           text: 'Ok',
           handler: (data) => {
             console.log('Confirm Ok');
-            // this.test = data;
-            return alert.dismiss(true);
+            this.currObjectContainer.push({id:randomId, type: type, row: row, col: col, channel: data.Channel, value: data.Value});
           }
         }
       ]
@@ -192,8 +204,7 @@ export class AddUI2Page implements OnInit {
           text: 'Ok',
           handler: (data) => {
             console.log('Confirm Ok');
-            // this.handleIt(data);
-            console.log(data);
+            
             this.currObjectContainer.push({id:randomId, type: type, row: row, col: col, channel: data.Channel, value: data.Value, value2: data.Value2});
           }
         }
@@ -210,10 +221,21 @@ export class AddUI2Page implements OnInit {
   goBack(){
     this.router.navigate(["/add-ui1"]);
   }
-  handleIt(data){
-    this.toggleData = data;
+ 
+  publish(){
+    this.currObjectContainer.forEach(data=>{
+      if(data.type == "toggle"){
+        this.UI.objectFactory(data.type, data.row, data.col, data.channel, data.value, data.value2);
+        
+      }
+      else{
+        this.UI.objectFactory(data.type, data.row, data.col, data.channel, data.value);
+        
+      }
+    })
+    console.log(this.UI.getObjects());
+
   }
-  
   ngIfCtrl(){
     this.hide = !this.hide;
   }
