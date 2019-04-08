@@ -10,7 +10,7 @@
 
 <ion-content>
 
-    <ion-item>
+    <!-- <ion-item>
         <ion-label position="fixed" clearInput>UI Name: </ion-label>
         <ion-input [(ngModel)]="ui_data.name"></ion-input>
     </ion-item>
@@ -35,7 +35,34 @@
         <ion-button (click)="goUI2()">
             Continue
         </ion-button>
-    </div>
+    </div> -->
+
+    <form [formGroup]="new_item_form" (submit)="goUI2(new_item_form.value)">
+        <ion-item>
+          <ion-label color="primary" position="floating">Name</ion-label>
+          <ion-input type="text" formControlName="name" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label color="primary" position="floating">Description</ion-label>
+          <ion-input type="text" formControlName="description" required></ion-input>
+        </ion-item>
+        <br>
+        <ion-item>
+            <ion-label>Encoding Protocol</ion-label>
+            <ion-select formControlName="encoding" [interfaceOptions]="customActionSheetOptions" interface="action-sheet" placeholder="Select One">
+              <ion-select-option value="p1">P1</ion-select-option>
+              <ion-select-option value="p2">P2</ion-select-option>
+              <ion-select-option value="p3">P3</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <br>
+        <ion-item>
+          <ion-label>Publish?</ion-label>
+          <ion-checkbox formControlName="publish" checked="false"></ion-checkbox>
+        </ion-item>
+        <br>
+        <ion-button class="submit-btn" expand="block" type="submit" [disabled]="!new_item_form.valid">Create</ion-button>
+      </form>
     
     
 </ion-content>

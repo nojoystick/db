@@ -14,6 +14,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Validators, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-add-ui1',
@@ -22,23 +23,30 @@ import { Router } from '@angular/router';
 })
 export class AddUI1Page implements OnInit {
 
-  ui_data = {
-    name: '',
-    description: '', 
-    encoding: ''
-  }
-  constructor(public router:Router) { }
+  new_item_form: FormGroup;
+
+  
+  constructor(public router:Router, public formBuilder: FormBuilder) {
+
+
+   }
 
   ngOnInit() {
-    
+    this.new_item_form = this.formBuilder.group({
+      name: new FormControl('', Validators.required),
+      description: new FormControl('', Validators.required),
+      encoding: new FormControl('', Validators.required),
+      publish: new FormControl('')
+    });
   }
 
   goBack(){
     this.router.navigate(["/tabs/tab1"]);
   }
 
-  goUI2(){
+  goUI2(value){
     //console.log(this.ui_data);
-    this.router.navigate(["/add-ui2"]);
+    console.log(value);
+    this.router.navigate(["/add-ui2", value]);
   }
 }

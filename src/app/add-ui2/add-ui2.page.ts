@@ -18,7 +18,6 @@ import { UIService } from '../services/ui.service';
 import { ObjectService } from '../services/object.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Validators, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {DragulaService} from 'ng2-dragula';
 import {ToastController} from '@ionic/angular';
 import { ButtonService } from '../services/button.service';
@@ -26,7 +25,9 @@ import { SwitchService } from '../services/switch.service';
 import { SliderService } from '../services/slider.service';
 import { Subscription } from 'rxjs';
 import { AlertController } from '@ionic/angular';
-import { async } from 'q';
+import { ActivatedRoute } from '@angular/router';
+import * as firebase from 'Firebase';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-add-ui2',
@@ -45,19 +46,22 @@ export class AddUI2Page implements OnInit {
   UI:UIService;
   isDropped:boolean = false;
   toggleData: any; 
-  
-  constructor(public router:Router, private dragulaService: DragulaService, private toastController: ToastController, private alertCtrl: AlertController) {
+  ui1_data: any;
 
+
+  constructor(public db: AngularFirestore, public router:Router, private dragulaService: DragulaService, private toastController: ToastController, private alertCtrl: AlertController, private activatedRoute: ActivatedRoute) {
+
+    this.ui1_data = this.activatedRoute.snapshot.params;
     
     this.objects.push(new ButtonService(0, 0));
     this.objects.push(new SwitchService(0, 0, 0));
     this.objects.push(new SliderService(0, 0));
 
+    
+    this.UI = new UIService(this.ui1_data.name, this.ui1_data.publish);
 
-    this.UI = new UIService("Test", false);
 
-
-    this.dragulaService.createGroup('items', {
+    this.dragulaService.createGroup("items", {
       copy: (el, source) => {
         
         
@@ -170,6 +174,7 @@ export class AddUI2Page implements OnInit {
     });
     await alert.present();
   }
+  
   async presentTogglePrompt(randomId:number, type:string, row:number, col:number) {
     const alert = await this.alertCtrl.create({
       header: 'Enter Channel&Value',
@@ -213,7 +218,9 @@ export class AddUI2Page implements OnInit {
     await alert.present();
   }
 
-  
+  ngOnDestroy() {
+    this.dragulaService.destroy("items");
+}
   ngOnInit() {
     
   }
@@ -234,9 +241,25 @@ export class AddUI2Page implements OnInit {
       }
     })
     console.log(this.UI.getObjects());
-
+    let ownerid = firebase.auth().currentUser.uid;
+    this.db.collection('/UI_Collections').add({
+      "ownerid":ownerid, 
+      "name":this.ui1_data.name, 
+      "description": this.ui1_data.description,
+      "publish": this.ui1_data.publish,
+      "objects": JSON.parse(JSON.stringify(this.UI.getObjects()))
+    });
+    console.log("Added to database successfully!");
+    // this.router.navigate(['/tabs/tab1']);
   }
+
+
+
   ngIfCtrl(){
     this.hide = !this.hide;
   }
+
+
+
+  
 }

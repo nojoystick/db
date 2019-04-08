@@ -6,4 +6,19 @@
 
 <ion-content>
 
+  <form [formGroup]="new_item_form" (submit)="signup(new_item_form.value)">
+
+    <ion-item>
+        <ion-label color="primary" position="floating">email</ion-label>
+        <ion-input type="text" formControlName="email" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" position="floating">password</ion-label>
+        <ion-input type="text" formControlName="password" required></ion-input>
+      </ion-item>
+  
+      
+      <ion-button class="submit-btn" expand="block" type="submit" [disabled]="!new_item_form.valid">Sign up</ion-button>
+      <!-- <ion-button class="submit-btn" expand="block" type="submit" (click)="signup()">Sign up</ion-button> -->
+</form>
 </ion-content>
