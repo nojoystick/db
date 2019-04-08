@@ -1,3 +1,19 @@
 .lab {
+    float: left;
 	margin-left: 10px;
+}
+.scanbtn{
+	margin: 5%;
+}
+.lgt{
+    width:100%;
+    --background: var(--ion-color-light);
+    --color: var(--ion-color-danger);
+}
+
+.btn-footer {
+        bottom: 0;
+        width:90%;
+        position:absolute;
+        margin:5%;
 }

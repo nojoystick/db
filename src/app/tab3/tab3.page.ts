@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
 import { BLE } from '@ionic-native/ble/ngx';
 import { BluetoothService } from '../services/bluetooth.service';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-tab3',
@@ -16,7 +18,8 @@ export class Tab3Page {
   showFooter = false;
   readVal = "No reading yet";
 
-  constructor(public navCtrl: NavController, 
+  constructor(private router: Router,
+  	          public navCtrl: NavController, 
               private ble: BLE,
               private bleService: BluetoothService) {}
 
@@ -59,7 +62,23 @@ export class Tab3Page {
 
   ab2str(buf) {
     return String.fromCharCode.apply(null, new Uint16Array(buf));
-}
+  }
+
+  logout(){
+    var self=this;
+
+    let fireBaseUser = firebase.auth().currentUser;
+    console.log(fireBaseUser.uid +" userid")
+
+
+    firebase.auth().signOut().then(function() {
+      console.log("logout succeed")
+      self.router.navigate(["/login"]);
+  // Sign-out successful.
+    }).catch(function(error) {
+      // An error happened.
+    });
+  }
 
 
 }
