@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { UIPage } from './ui.page';
-import { DeleteModalPageModule } from '../modals/delete-modal/delete-modal.module';
+import { DeleteModalPage } from '../modals/delete-modal/delete-modal.page';
 var routes = [
     {
         path: '',
@@ -22,10 +22,10 @@ var UIPageModule = /** @class */ (function () {
                 FormsModule,
                 ReactiveFormsModule,
                 IonicModule,
-                DeleteModalPageModule,
                 RouterModule.forChild(routes)
             ],
-            declarations: [UIPage]
+            declarations: [UIPage, DeleteModalPage,],
+            entryComponents: [DeleteModalPage]
         })
     ], UIPageModule);
     return UIPageModule;

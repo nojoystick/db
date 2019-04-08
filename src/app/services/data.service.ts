@@ -1,23 +1,25 @@
 import { Injectable } from '@angular/core';
 import { UIService } from '../services/ui.service';
 import * as firebase from 'firebase';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-
-  UI_ref = firebase.database().ref('UIs/');
-  constructor() { }
+  UI_ref = firebase.database().ref('UI_Collections/');
+  constructor( public db: AngularFirestore ) { }
 
   pushToFirebase(ui: UIService)
   {
-    let newRef = this.UI_ref.push();
-    newRef.set({
-      'name' : ui.getName(),
-      'isPublic' : ui.getPublic(),
-      'objects' : ui.getObjects()
+    this.db.collection('UI_Collections/').add({
+      "ownerid":ui.getOwnerID(), 
+      "name":ui.getName(), 
+      "description": ui.getDescription(),
+      "publish": ui.getPublic(),
+      "objects": JSON.parse(JSON.stringify(ui.getObjects()))
     });
+    
   }
   
   deleteById(id:number)
@@ -45,4 +47,5 @@ export class DataService {
   {
     let newInfo = firebase.database().ref('UIs/'+currentItem.id).update(currentItem);
   }
+  getUserID(){ return firebase.auth().currentUser.uid; }
 }

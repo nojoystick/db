@@ -20,6 +20,9 @@ var Tab1Page = /** @class */ (function () {
     Tab1Page.prototype.openUIPage = function () {
         this.router.navigate(["/ui"]);
     };
+    Tab1Page.prototype.addUI = function () {
+        this.router.navigate(["/add-ui1"]);
+    };
     Tab1Page = tslib_1.__decorate([
         Component({
             selector: 'app-tab1',

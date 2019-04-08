@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 var DataService = /** @class */ (function () {
     function DataService() {
+        this.UI_ref = firebase.database().ref('UIs/');
     }
     DataService.prototype.pushToFirebase = function (ui) {
-        var newRef = firebase.database().ref('UIs/').push();
+        var newRef = this.UI_ref.push();
         newRef.set({
             'name': ui.getName(),
             'isPublic': ui.getPublic(),
@@ -15,17 +16,20 @@ var DataService = /** @class */ (function () {
     DataService.prototype.deleteById = function (id) {
         firebase.database().ref('UIs/' + id).remove();
     };
-    DataService.prototype.deleteByObject = function (currentItem) {
-        orders_ref.orderByChild('uid').equalTo(id).on("value", function (data) {
+    DataService.prototype.deleteUI = function (currentItem) {
+        var newInfo = firebase.database().ref('UIs' + currentItem.id).remove();
+    };
+    DataService.prototype.deleteByName = function (name) {
+        var id;
+        this.UI_ref.orderByChild('name').equalTo(name).on("value", function (data) {
             data.forEach(function (data) {
-                items.push({
-                    'name': data.val().name,
-                    'totalprice': data.val().number,
-                    'price': data.val().price,
-                    'date': data.val().date
-                });
+                id = data.val().key;
             });
-        }, editUI(currentItem), {});
+        });
+        this.deleteById(id);
+    };
+    DataService.prototype.editUI = function (currentItem) {
+        var newInfo = firebase.database().ref('UIs/' + currentItem.id).update(currentItem);
     };
     DataService = tslib_1.__decorate([
         Injectable({

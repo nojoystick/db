@@ -17,10 +17,12 @@ export class UIService {
 _name:string;
 _isPublic:boolean;
 _objects:Array<ObjectService> = [];
+_ownerid = "";
+_description = "";
 NUM_ROWS:number = 8;
 NUM_COLS:number = 4;
 
-  constructor(name:string, isPublic:boolean) 
+  constructor(name:string, description: string, isPublic:boolean) 
   { 
     this._name = name;
     this._isPublic = isPublic;
@@ -93,8 +95,11 @@ NUM_COLS:number = 4;
     return retItems;
   }
 
+  setOwnerID(id:any) { this._ownerid = id; }
   getObjects(){ return this._objects; }
   getName(){ return this._name; }
   getPublic(){ return this._isPublic; }
+  getOwnerID() { return this._ownerid; }
+  getDescription() { return this._description; }
 
 }

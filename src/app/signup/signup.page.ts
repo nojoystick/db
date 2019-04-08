@@ -12,7 +12,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
 // import { AngularFireAuth } from '@angular/fire/auth';
-import * as firebase from 'Firebase';
+import * as firebase from 'firebase';
 import { Validators, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({

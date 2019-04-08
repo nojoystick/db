@@ -18,16 +18,17 @@ import { UIService } from '../services/ui.service';
 import { ObjectService } from '../services/object.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {DragulaService} from 'ng2-dragula';
-import {ToastController} from '@ionic/angular';
+import { DragulaService } from 'ng2-dragula';
+import { ToastController } from '@ionic/angular';
 import { ButtonService } from '../services/button.service';
 import { SwitchService } from '../services/switch.service';
 import { SliderService } from '../services/slider.service';
 import { Subscription } from 'rxjs';
 import { AlertController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
-import * as firebase from 'Firebase';
+import { DataService } from '../services/data.service';
 import { AngularFirestore } from '@angular/fire/firestore';
+
 
 @Component({
   selector: 'app-add-ui2',
@@ -49,7 +50,7 @@ export class AddUI2Page implements OnInit {
   ui1_data: any;
 
 
-  constructor(public db: AngularFirestore, public router:Router, private dragulaService: DragulaService, private toastController: ToastController, private alertCtrl: AlertController, private activatedRoute: ActivatedRoute) {
+  constructor(public db: AngularFirestore, public router:Router, private dragulaService: DragulaService, private toastController: ToastController, private alertCtrl: AlertController, private activatedRoute: ActivatedRoute, private dataService: DataService) {
 
     this.ui1_data = this.activatedRoute.snapshot.params;
     
@@ -58,7 +59,7 @@ export class AddUI2Page implements OnInit {
     this.objects.push(new SliderService(0, 0));
 
     
-    this.UI = new UIService(this.ui1_data.name, this.ui1_data.publish);
+    this.UI = new UIService(this.ui1_data.name, this.ui1_data.description, this.ui1_data.publish);
 
 
     this.dragulaService.createGroup("items", {
@@ -87,10 +88,10 @@ export class AddUI2Page implements OnInit {
         //  console.log("YEET" + target.id + "ROW: " + target.parentElement.id);
         
         
-        if(el.tagName == "ION-TOGGLE"){
+        if(el.tagName == "ION-BUTTON"){
           if(el.getAttribute("tag") == null){ // New Button/Toggle
               let randomId = Math.floor(Math.random() * 100);
-              this.presentTogglePrompt(randomId ,"toggle", parseInt(target.parentElement.id), parseInt(target.id));
+              this.presentAlertPrompt(randomId ,"button", parseInt(target.parentElement.id), parseInt(target.id));
               
               el.setAttribute("tag", String(randomId));
               
@@ -114,7 +115,7 @@ export class AddUI2Page implements OnInit {
         else{
           if(el.getAttribute("tag") == null){
             let randomId = Math.floor(Math.random() * 600)+100;
-            this.presentAlertPrompt(randomId ,el.tagName == "ION-BUTTON" ? "button": "slider", parseInt(target.parentElement.id), parseInt(target.id));
+            this.presentTogglePrompt(randomId ,el.tagName == "ION-TOGGLE" ? "toggle": "slider", parseInt(target.parentElement.id), parseInt(target.id));
             el.setAttribute("tag", String(randomId));
             console.log(this.currObjectContainer);
             //
@@ -241,14 +242,8 @@ export class AddUI2Page implements OnInit {
       }
     })
     console.log(this.UI.getObjects());
-    let ownerid = firebase.auth().currentUser.uid;
-    this.db.collection('/UI_Collections').add({
-      "ownerid":ownerid, 
-      "name":this.ui1_data.name, 
-      "description": this.ui1_data.description,
-      "publish": this.ui1_data.publish,
-      "objects": JSON.parse(JSON.stringify(this.UI.getObjects()))
-    });
+    this.UI.setOwnerID(this.dataService.getUserID());
+    this.dataService.pushToFirebase(this.UI);
     console.log("Added to database successfully!");
     this.router.navigate(['/tabs/tab1']);
   }
@@ -257,9 +252,5 @@ export class AddUI2Page implements OnInit {
 
   ngIfCtrl(){
     this.hide = !this.hide;
-  }
-
-
-
-  
+  }  
 }
