@@ -250,7 +250,7 @@ export class AddUI2Page implements OnInit {
       "objects": JSON.parse(JSON.stringify(this.UI.getObjects()))
     });
     console.log("Added to database successfully!");
-    // this.router.navigate(['/tabs/tab1']);
+    this.router.navigate(['/tabs/tab1']);
   }
 
 
