@@ -9,7 +9,9 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx'
-import {DragulaModule} from 'ng2-dragula';
+
+import { BLE } from '@ionic-native/ble/ngx';
+import { DragulaModule } from 'ng2-dragula';
 import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import config from '../firebase';
@@ -25,6 +27,7 @@ import { AngularFireModule } from '@angular/fire';
     StatusBar,
     SplashScreen,
     BluetoothSerial,
+    BLE,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
     
   ],

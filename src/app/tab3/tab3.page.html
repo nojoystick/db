@@ -1,12 +1,32 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Settings
+      BLE Scanner
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-	
-	
+   <h1 class="lab">Available Devices</h1>     
+   <ion-button float-right class = "scanbtn" (click)="scan()"> Scan </ion-button>
+   <ion-list> 
+    <ion-item ion-item *ngFor="let device of devices" (click) = "deviceSelected(device)">
+      <h2>{{ device.name || 'Unnamed' }}</h2>
+      <p>{{ device.id }}</p>
+      <p slot="end">RSSI: {{ device.rssi }}</p>
+    </ion-item>  
+   </ion-list> 
+   <h1 class ="lab">User Settings</h1>
+   <!--<h2 float-left >{{readVal}}</h2>-->
+<div class="btn-footer">
+   <ion-button class="lgt" (click)="logout()">
+   Logout<ion-icon slot="end" name="exit"></ion-icon>
+   </ion-button>
+ </div>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar style="opacity: 50%" *ngIf="this.showFooter">
+    <p>{{ statusMessage }}</p>
+  </ion-toolbar>
+</ion-footer>
