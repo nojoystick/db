@@ -16,10 +16,13 @@ import { ModalController } from '@ionic/angular';
 import { DeleteModalPage } from '../modals/delete-modal/delete-modal.page';
 import { UIService } from '../services/ui.service';
 import { DataService } from '../services/data.service';
+import { BluetoothService } from '../services/bluetooth.service';
 var UIPage = /** @class */ (function () {
-    function UIPage(router, modalController) {
+    function UIPage(router, modalController, data, bleService) {
         this.router = router;
         this.modalController = modalController;
+        this.data = data;
+        this.bleService = bleService;
         this.NUM_ROWS = 8;
         this.NUM_COLS = 4;
         this.rows = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -27,21 +30,13 @@ var UIPage = /** @class */ (function () {
         this.objects = [];
         this.sizes = [];
         this.values = [];
-        this.data = new DataService();
-        this.UI = new UIService("generic UI", false);
-        /*
-        for(var i = 1; i <= this.NUM_ROWS; i++)
-            for(var j = 1; j <= this.NUM_COLS; j++)
-                this.UI.objectFactory("spacer", i, j, 0, 0);
-        */
+        this.UI = new UIService("Sample", false);
         this.UI.objectFactory("button", 1, 1, 1, 10);
-        this.UI.objectFactory("button", 1, 2, 2, 11);
-        this.UI.objectFactory("button", 1, 3, 3, 12);
         this.UI.objectFactory("button", 1, 4, 4, 13);
-        this.UI.objectFactory("switch", 2, 1, 5, 0, 1);
+        this.UI.objectFactory("switch", 2, 3, 5, 0, 1);
         this.UI.objectFactory("switch", 2, 2, 6, 0, 5);
-        this.UI.objectFactory("switch", 3, 1, 7, 0, 10);
-        this.UI.objectFactory("switch", 3, 2, 8, 0, 15);
+        this.UI.objectFactory("switch", 3, 3, 7, 0, 10);
+        this.UI.objectFactory("switch", 3, 4, 8, 0, 15);
         this.UI.objectFactory("slider", 4, 1, 9, 0);
         this.UI.objectFactory("button", 7, 1, 10, 20);
         this.UI.objectFactory("button", 7, 2, 11, 20);
@@ -53,17 +48,11 @@ var UIPage = /** @class */ (function () {
             this.rows[i] = i + 1;
         for (var i = 0; i < this.NUM_COLS; i++)
             this.cols[i] = i + 1;
-        var r, c;
-        for (r = 0; r <= this.NUM_ROWS; r++) {
-            this.values[r] = [];
-            for (c = 0; c <= this.NUM_COLS; c++)
-                this.values[r][c] = { 'value': 0, 'bool': false };
-        }
-        //this.data.pushToFirebase(this.UI);
+        if (bleService.peripheral == null)
+            bleService.showAlert("No device connected", "Connect a device in settings to use this UI");
     }
     UIPage.prototype.ngOnInit = function () {
         this.objects = this.UI.getObjects();
-        this.getSpacers();
         this.sortObjects();
         for (var i = 0; i < this.objects.length; i++) {
             var temp = this.objects[i];
@@ -82,7 +71,7 @@ var UIPage = /** @class */ (function () {
         }
     };
     UIPage.prototype.sortObjects = function () {
-        //sort by column, then sort by row
+        //order by row, column
         this.objects.sort(function (obj1, obj2) {
             return obj1.getCol() - obj2.getCol();
         });
@@ -90,30 +79,8 @@ var UIPage = /** @class */ (function () {
             return obj1.getRow() - obj2.getRow();
         });
     };
-    UIPage.prototype.getSpacers = function () {
-        // fill object array with spacers as needed
-        //where is a spacer needed?
-        // -if a row is empty
-        // -if slots in the middle of a row are empty
-        var rowExists = false;
-        for (var i = 1; i <= this.NUM_ROWS; i++) {
-            for (var j = 0; j < this.objects.length; j++) {
-                if (this.objects[j].getRow() == i) {
-                    rowExists = true;
-                    continue;
-                }
-            }
-            if (rowExists == false) {
-                this.UI.objectFactory("spacer", i, 1, 4, 1);
-            }
-            else {
-                rowExists = false;
-                //solve case 2 here
-            }
-        }
-    };
     UIPage.prototype.handler = function (channel, row, col, value) {
-        //more of this bad style of method overloading
+        //more of this new style of method overloading
         if (value == null) {
             var tempValue = this.values[row][col];
             var value;
@@ -129,23 +96,23 @@ var UIPage = /** @class */ (function () {
                 value = tempValue.value;
             }
         }
-        console.log("WRITING " + value + " TO CHANNEL " + channel);
+        this.bleService.pack(channel, value);
     };
-    UIPage.prototype.switchHandler = function (channel, row, col, ev) {
-        console.log(ev);
-    };
-    UIPage.prototype.goBack = function () {
-        this.router.navigate(['/tabs/tab1']);
-    };
+    UIPage.prototype.goBack = function () { this.router.navigate(['/tabs/tab1']); };
     UIPage.prototype.deletePopup = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var modal;
+            var data, modal;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.modalController.create({
-                            component: DeleteModalPage,
-                            componentProps: { value: 123 }
-                        })];
+                    case 0:
+                        data = { message: 'modal page works' };
+                        return [4 /*yield*/, this.modalController.create({
+                                showBackdrop: true,
+                                backdropDismiss: true,
+                                cssClass: 'del-modal',
+                                component: DeleteModalPage,
+                                componentProps: { value: data }
+                            })];
                     case 1:
                         modal = _a.sent();
                         return [4 /*yield*/, modal.present()];
@@ -160,7 +127,10 @@ var UIPage = /** @class */ (function () {
             templateUrl: './ui.page.html',
             styleUrls: ['./ui.page.scss'],
         }),
-        tslib_1.__metadata("design:paramtypes", [Router, ModalController])
+        tslib_1.__metadata("design:paramtypes", [Router,
+            ModalController,
+            DataService,
+            BluetoothService])
     ], UIPage);
     return UIPage;
 }());

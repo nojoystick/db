@@ -42,15 +42,10 @@ export class UIPage implements OnInit {
   constructor(private router: Router,
               public modalController: ModalController,
               private data: DataService,
-              private bluetoothSerial: BluetoothService
+              private bleService: BluetoothService
     ) 
   { 
-    this.UI = new UIService("Sample", false);
-    /*
-    for(var i = 1; i <= this.NUM_ROWS; i++)
-    	for(var j = 1; j <= this.NUM_COLS; j++)
-    		this.UI.objectFactory("spacer", i, j, 0, 0);
-    */
+    this.UI = new UIService("Sample", "", false);
     this.UI.objectFactory("button", 1, 1, 1, 10);
 
     this.UI.objectFactory("button", 1, 4, 4, 13);
@@ -74,7 +69,9 @@ export class UIPage implements OnInit {
     for(var i = 0; i < this.NUM_COLS; i++)
     	this.cols[i] = i+1;
 
-    //this.data.pushToFirebase(this.UI);
+    // if(bleService.peripheral == null) 
+    //   bleService.showAlert("No device connected",
+    //     "Connect a device in settings to use this UI");
   }
 
   ngOnInit() 
@@ -127,7 +124,7 @@ export class UIPage implements OnInit {
       //slider
       else{ value = tempValue.value; }
     }
-    this.bluetoothSerial.pack(channel, value);
+    this.bleService.pack(channel, value);
   }
 
   goBack(){ this.router.navigate(['/tabs/tab1']); }

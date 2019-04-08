@@ -7,11 +7,24 @@ import { SpacerService } from './spacer.service';
 var UIService = /** @class */ (function () {
     function UIService(name, isPublic) {
         this._objects = [];
+        this.NUM_ROWS = 8;
+        this.NUM_COLS = 4;
         this._name = name;
         this._isPublic = isPublic;
+        //default: fill with spacers
+        for (var i = 1; i <= this.NUM_ROWS; i++)
+            for (var j = 1; j <= this.NUM_COLS; j++)
+                this.objectFactory("spacer", i, j, 1, 1);
     }
     UIService.prototype.addObject = function (obj, row, col) {
+        //overwrite old object at this position
         obj.setPos(row, col);
+        for (var i = 0; i < this._objects.length; i++) {
+            if ((this._objects[i].getRow() == row) && (this._objects[i].getCol() == col)) {
+                this._objects[i] = obj;
+                return;
+            }
+        }
         this._objects.push(obj);
     };
     UIService.prototype.addObjects = function (objs, row, col) {

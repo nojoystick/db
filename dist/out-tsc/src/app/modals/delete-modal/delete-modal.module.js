@@ -4,11 +4,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { DeleteModalPage } from './delete-modal.page';
 var routes = [
     {
         path: '',
-        component: DeleteModalPage
     }
 ];
 var DeleteModalPageModule = /** @class */ (function () {
@@ -22,7 +20,6 @@ var DeleteModalPageModule = /** @class */ (function () {
                 IonicModule,
                 RouterModule.forChild(routes)
             ],
-            declarations: [DeleteModalPage]
         })
     ], DeleteModalPageModule);
     return DeleteModalPageModule;

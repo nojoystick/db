@@ -8,6 +8,8 @@ var SliderService = /** @class */ (function (_super) {
         var type = "slider";
         var sliderWidth = 4;
         var sliderHeight = 1;
+        // All slider objects will transmit range 0 - 1024,
+        // mimicking the behavior of a hardware pot
         if (value == null)
             var value = 0;
         _this = _super.call(this, type, sliderWidth, sliderHeight, channel, value) || this;
