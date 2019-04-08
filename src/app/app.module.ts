@@ -9,7 +9,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx'
-import {DragulaModule} from 'ng2-dragula';
+import { DragulaModule } from 'ng2-dragula';
+import { BLE } from '@ionic-native/ble/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +21,7 @@ import {DragulaModule} from 'ng2-dragula';
     StatusBar,
     SplashScreen,
     BluetoothSerial,
+    BLE,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
