@@ -11,7 +11,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Validators, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { DeleteModalPage } from '../modals/delete-modal/delete-modal.page';
@@ -40,34 +40,16 @@ export class UIPage implements OnInit {
   UI:UIService;
 
   constructor(private router: Router,
+              private route: ActivatedRoute,
               public modalController: ModalController,
               private data: DataService,
               private bleService: BluetoothService
-    ) 
-  { 
-    this.UI = new UIService("Sample", "", false);
-    this.UI.objectFactory("button", 1, 1, 1, 10);
-
-    this.UI.objectFactory("button", 1, 4, 4, 13);
-
-    this.UI.objectFactory("switch", 2, 3, 5, 0, 1);
-    this.UI.objectFactory("switch", 2, 2, 6, 0, 5);
-    this.UI.objectFactory("switch", 3, 3, 7, 0, 10);
-    this.UI.objectFactory("switch", 3, 4, 8, 0, 15);
-
-    this.UI.objectFactory("slider", 4, 1, 9, 0);
-  
-    this.UI.objectFactory("button", 7, 1, 10, 20);
-    this.UI.objectFactory("button", 7, 2, 11, 20);
-    this.UI.objectFactory("switch", 7, 3, 12, 0, 20);
-    this.UI.objectFactory("switch", 8, 1, 13, 0, 20);
-    this.UI.objectFactory("button", 8, 2, 14, 20);
-    this.UI.objectFactory("button", 8, 3, 15, 20);
-
-    for(var i = 0; i < this.NUM_ROWS; i++)
-    	this.rows[i] = i+1;
-    for(var i = 0; i < this.NUM_COLS; i++)
-    	this.cols[i] = i+1;
+    ) { 
+    this.route.params.subscribe(
+        param => {
+          this.UI = this.data.idToObj(param.uniqueid);
+        }
+      )
 
     // if(bleService.peripheral == null) 
     //   bleService.showAlert("No device connected",

@@ -32,7 +32,8 @@ user = "";
       )
   {
     this.user = data.getUserID();
-    console.log(this.user);
+    this.items = data.getUIs(this.user);
+    console.log(this.items);
   }
 
   openUIPage(item){
@@ -43,22 +44,4 @@ user = "";
 
   addUI(){ this.router.navigate(["/add-ui1"]); }
 
-
-  logout()
-  {
-    var self=this;
-
-    let fireBaseUser = firebase.auth().currentUser;
-    console.log(fireBaseUser.uid +" userid")
-
-
-    firebase.auth().signOut().then(function() 
-    {
-      console.log("logout succeed")
-      self.router.navigate(["/login"]);
-      // Sign-out successful.
-    }).catch(function(error) {
-      // An error happened.
-    });
-  }
 }

@@ -88,10 +88,10 @@ export class AddUI2Page implements OnInit {
         //  console.log("YEET" + target.id + "ROW: " + target.parentElement.id);
         
         
-        if(el.tagName == "ION-BUTTON"){
+        if(el.tagName == "ION-TOGGLE"){
           if(el.getAttribute("tag") == null){ // New Button/Toggle
               let randomId = Math.floor(Math.random() * 100);
-              this.presentAlertPrompt(randomId ,"button", parseInt(target.parentElement.id), parseInt(target.id));
+              this.presentTogglePrompt(randomId ,"switch", parseInt(target.parentElement.id), parseInt(target.id));
               
               el.setAttribute("tag", String(randomId));
               
@@ -115,7 +115,7 @@ export class AddUI2Page implements OnInit {
         else{
           if(el.getAttribute("tag") == null){
             let randomId = Math.floor(Math.random() * 600)+100;
-            this.presentTogglePrompt(randomId ,el.tagName == "ION-TOGGLE" ? "toggle": "slider", parseInt(target.parentElement.id), parseInt(target.id));
+            this.presentAlertPrompt(randomId ,el.tagName == "ION-BUTTON" ? "button": "slider", parseInt(target.parentElement.id), parseInt(target.id));
             el.setAttribute("tag", String(randomId));
             console.log(this.currObjectContainer);
             //
@@ -232,7 +232,7 @@ export class AddUI2Page implements OnInit {
  
   publish(){
     this.currObjectContainer.forEach(data=>{
-      if(data.type == "toggle"){
+      if(data.type == "switch"){
         this.UI.objectFactory(data.type, data.row, data.col, data.channel, data.value, data.value2);
         
       }

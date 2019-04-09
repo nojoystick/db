@@ -51,7 +51,7 @@ NUM_COLS:number = 4;
   {
     for(var i = 0; i < objs.length; i++)
     {
-    	objs[i].setPos(row[i], col[i])
+    	objs[i].setPos(row[i], col[i]);
     	this._objects.push(objs[i]);
     }
   }
@@ -60,18 +60,11 @@ NUM_COLS:number = 4;
   {
     var obj:ObjectService;
 
-    // approximating method overloading in typescript
-    // if it's a switch (two values):
-    if(value2 != null)
-    {
-      obj = new SwitchService(channel, value, value2)
-    }
-    
-    // if it's a 1 val object:
-    else
-    {
     switch(type)
     {
+      case("switch"):
+          obj = new SwitchService(channel, value, value2);
+      break;
       case("slider"):
           obj = new SliderService(channel, value);
       break;
@@ -82,7 +75,6 @@ NUM_COLS:number = 4;
         // channel and value here are used for width/height
     	  obj = new SpacerService(channel, value);
     	break;
-    }
     }
   	this.addObject(obj, row, col)
   }
