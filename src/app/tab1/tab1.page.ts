@@ -31,13 +31,12 @@ user = "";
       private data: DataService
       )
   {
+    this.items = [];
     this.user = data.getUserID();
     this.items = data.getUIs(this.user);
-    console.log(this.items);
   }
 
   openUIPage(item){
-    console.log(item);
     this.router.navigate(["/ui", item]);
   }
 

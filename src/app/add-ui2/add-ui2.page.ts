@@ -51,7 +51,6 @@ export class AddUI2Page implements OnInit {
 
 
   constructor(public db: AngularFirestore, public router:Router, private dragulaService: DragulaService, private toastController: ToastController, private alertCtrl: AlertController, private activatedRoute: ActivatedRoute, private dataService: DataService) {
-
     this.ui1_data = this.activatedRoute.snapshot.params;
     
     this.objects.push(new ButtonService(0, 0));
@@ -223,7 +222,7 @@ export class AddUI2Page implements OnInit {
     this.dragulaService.destroy("items");
 }
   ngOnInit() {
-    
+    this.currObjectContainer = [];
   }
 
   goBack(){
@@ -231,14 +230,15 @@ export class AddUI2Page implements OnInit {
   }
  
   publish(){
+    console.log(this.currObjectContainer);
     this.currObjectContainer.forEach(data=>{
       if(data.type == "switch"){
         this.UI.objectFactory(data.type, data.row, data.col, data.channel, data.value, data.value2);
-        
+        console.log("making a switch");
       }
       else{
         this.UI.objectFactory(data.type, data.row, data.col, data.channel, data.value);
-        
+        console.log("making a "+data.type);
       }
     })
     console.log(this.UI.getObjects());

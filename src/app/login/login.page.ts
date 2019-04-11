@@ -33,7 +33,6 @@ export class LoginPage implements OnInit {
 
   loginGoogle(){
     var self=this;
-    console.log("google login")
     // Using a popup.
   var provider = new firebase.auth.GoogleAuthProvider();
   provider.addScope('profile');
@@ -43,8 +42,6 @@ export class LoginPage implements OnInit {
    var token = result.credential.providerId;
    // The signed-in user info.
    var user = result.user;
-   console.log(user);
-   console.log("login succeeded")
    self.router.navigate(["/tabs/tab1"]);
   });
 }
@@ -54,17 +51,14 @@ loginFacebook(){
   //to use its login service
 
   var self=this;
-    console.log("facebook login")
     // Sign in using a popup.
   var provider = new firebase.auth.FacebookAuthProvider();
   provider.addScope('user_birthday');
   firebase.auth().signInWithPopup(provider).then(function(result) {
     // This gives you a Facebook Access Token.
     var token = result.credential.providerId;
-    console.log(token)
     // The signed-in user info.
     var user = result.user;
-    console.log(user);
     self.router.navigate(["/tabs/tab1"]);
   });
 
@@ -79,21 +73,18 @@ login(value){
   // Handle Errors here.
   var errorCode = error.code;
   var errorMessage = error.message;
-  console.log(errorCode);
 
   if (errorCode === 'auth/wrong-password') {
           alert('Wrong password.');
         } else if (errorCode === 'auth/user-not-found'){
           alert("User does not exist");
         }
-        console.log(error);
   }
 ).then((result)=>{
     
     // var user = result.user;
     
     this.user = result;
-    console.log(this.user.user.email);
     self.router.navigate(["/tabs/tab1"]);
 });
 }

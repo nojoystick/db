@@ -8,14 +8,20 @@ import { Events } from '@ionic/angular';
 })
 export class DataService {
   UIs = [];
+  UserUIs = [];
   UI_ref = firebase.database().ref('UI_Collections/');
-  User_ref = firebase.database().ref('UserUIs');
+  User_ref = firebase.database().ref('UserUIs/');
 
   constructor( public events: Events ) 
   { 
     this.UI_ref.on('value', resp => {
       this.UIs = [];
       this.UIs = snapshotToArray(resp);
+      this.events.publish('dataloaded', Date.now());
+    })
+    this.User_ref.on('value', resp => {
+      this.UserUIs = [];
+      this.UserUIs = snapshotToArray(resp);
       this.events.publish('dataloaded', Date.now());
     })
   }
@@ -45,10 +51,25 @@ export class DataService {
     })
   }
   
-  // deleteById(id:number)
-  // {
-  //   firebase.database().ref('UI_Collections/'+id).remove();
-  // }
+  deleteById(uniqueid:number)
+  {
+    this.User_ref.orderByChild('uniqueid').equalTo(uniqueid).on("value",function(data){
+      data.forEach(function(data){
+        firebase.database().ref('UserUIs/'+data.key).remove();
+      });
+    })
+
+    var items;
+    this.UI_ref.on('value', resp => {
+      items = [];
+      items = snapshotToArray(resp);
+    })
+    for(var i:number = 0; i < items.length; i++)
+    {
+      if(items[i].ownerid == this.getUserID() && items[i].uniqueid == uniqueid)
+        this.UI_ref.child(items[i].id).remove();
+    }
+  }
 
   // deleteUI(currentItem)
   // {
@@ -84,13 +105,12 @@ export class DataService {
           });
         });
       })
-    console.log(UIs);
-    return UIs;
+    this.UserUIs = UIs;
+    return this.UserUIs;
   }
 
   idToObj(obj_id)
   {
-    console.log("Searching for "+obj_id);
     var ui:UIService;
     this.UI_ref.orderByChild('uniqueid').equalTo(obj_id).on("value",function(data){
           data.forEach(function(data){

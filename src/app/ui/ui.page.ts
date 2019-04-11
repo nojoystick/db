@@ -38,6 +38,7 @@ export class UIPage implements OnInit {
   sizes:number[][] = [];
   values:any[][] = [];
   UI:UIService;
+  uniqueid;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -47,7 +48,8 @@ export class UIPage implements OnInit {
     ) { 
     this.route.params.subscribe(
         param => {
-          this.UI = this.data.idToObj(param.uniqueid);
+          this.UI = this.data.idToObj(param.uniqueid),
+          this.uniqueid = param.uniqueid;
         }
       )
 
@@ -113,7 +115,7 @@ export class UIPage implements OnInit {
   
   async deletePopup()
   {
-    var data = {message: 'modal page works'};
+    var data = this.uniqueid;
     const modal = await this.modalController.create({
       showBackdrop: true,
       backdropDismiss: true,

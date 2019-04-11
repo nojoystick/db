@@ -10,8 +10,9 @@ export class BluetoothService {
   devices: any[] = [];
   peripheral: any = {};
   statusMessage: string;
-  SERV = '4fafc201-1fb5-459e-8fcc-c5c9c331914b'
-  GENERIC_CHARACTERISTIC = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';//'1800';
+  SERV = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+  TX_CHARACTERISTIC = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E";
+  RX_CHARACTERISTIC = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E";
 
   constructor(private ble: BLE,
               private alertController: AlertController,
@@ -29,7 +30,6 @@ export class BluetoothService {
 
   onDeviceDiscovered(device) 
   {
-    console.log('Discovered ' + JSON.stringify(device, null, 2));
     this.devices.push(device);
   }
 
@@ -42,19 +42,12 @@ export class BluetoothService {
   pack(channel:number, value:number)
   {
     let v:string = value.toString();
-    let vbuffer = <ArrayBuffer> this.stringToBytes(v);
-
     let c:string = channel.toString();
-    let cbuffer = <ArrayBuffer> this.stringToBytes(c);
+    let enc:string = c + "," + v;
+    let out = <ArrayBuffer> this.stringToBytes(enc);
 
-    console.log("Writing: ");
-    console.log(this.peripheral.id);
-    console.log(this.GENERIC_CHARACTERISTIC);
-    console.log(vbuffer);
-    console.log(cbuffer);
-
-    this.ble.write(this.peripheral.id, this.SERV, this.GENERIC_CHARACTERISTIC, vbuffer).then(
-      () => console.log('Set value of '+this.GENERIC_CHARACTERISTIC+' to ' + vbuffer),
+    this.ble.write(this.peripheral.id, this.SERV, this.TX_CHARACTERISTIC, out).then(
+      () => console.log('Set value of '+this.TX_CHARACTERISTIC+' to ' + out),
       e => this.showAlert('Unexpected Error', 'Error updating characteristic ' + e)
       );
   }
@@ -87,4 +80,8 @@ export class BluetoothService {
 
     return await alert.present();
   }
+
+  getServ() { return this.SERV };
+  getRX() { return this.RX_CHARACTERISTIC };
+  getTX() { return this.TX_CHARACTERISTIC };
 }

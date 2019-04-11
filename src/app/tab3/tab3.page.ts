@@ -12,7 +12,7 @@ import * as firebase from 'firebase';
 })
 export class Tab3Page {
   
-  devices: any[] = [];
+  devices:any[] = [];
   peripheral: any = {};
   statusMessage: string;
   showFooter = false;
@@ -21,7 +21,8 @@ export class Tab3Page {
   constructor(private router: Router,
   	          public navCtrl: NavController, 
               private ble: BLE,
-              private bleService: BluetoothService) {}
+              private bleService: BluetoothService) 
+  {}
 
   scan()
   {
@@ -47,21 +48,20 @@ export class Tab3Page {
     this.setStatus("Connecting to "+device.id);
     this.ble.connect(device.id).subscribe(
       peripheral => this.bleService.onConnected(peripheral),
-      //onDisconnected() = error message ?
+      peripheral => this.onDisconnected(peripheral)
     );
-    var data;
-    this.ble.read(this.peripheral.id, '4fafc201-1fb5-459e-8fcc-c5c9c331914b', 'beb5483e-36e1-4688-b7f5-ea07361b26a8').then(
-      buffer=>{
-        data = this.ab2str(buffer);
-        console.log('Online characteristic '+ data);
-      }
-      )
-    this.readVal="Read from device";
-    this.readVal = data;
+    this.peripheral = this.bleService.peripheral;
+    if(this.peripheral != null)
+      this.setStatus("Device connected!");
   }
 
   ab2str(buf) {
     return String.fromCharCode.apply(null, new Uint16Array(buf));
+  }
+
+  onDisconnected(peripheral)
+  {
+    this.setStatus("Unexpectedly disconnected");
   }
 
   logout(){

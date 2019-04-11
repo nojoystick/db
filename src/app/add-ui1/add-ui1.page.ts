@@ -34,9 +34,8 @@ export class AddUI1Page implements OnInit {
   ngOnInit() {
     this.new_item_form = this.formBuilder.group({
       name: new FormControl('', Validators.required),
-      description: new FormControl('', Validators.required),
-      encoding: new FormControl('', Validators.required),
-      publish: new FormControl('')
+      publish: new FormControl(''),
+      description: new FormControl('', Validators.required)
     });
   }
 
