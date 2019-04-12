@@ -129,6 +129,16 @@ export class DataService {
         })
     return ui;
   }
+
+  getPublishedUI(){
+    let publishedUI = [];
+    this.UIs.forEach((ui) =>{
+      if(ui.publish && ui.ownerid != this.getUserID()){ // Check if publish is true and will only show the ones that were not made from User.
+        publishedUI.push(ui);
+      }
+    })
+    return publishedUI;
+  }
 }
 export const snapshotToArray = snapshot => {
   let returnArr = [];
