@@ -25,6 +25,7 @@ NUM_COLS:number = 4;
   constructor(name:string, description: string, isPublic:boolean) 
   { 
     this._name = name;
+    this._description = description;
     this._isPublic = isPublic;
     //default: fill with spacers
     for(var i = 1; i <= this.NUM_ROWS; i++)
