@@ -7,6 +7,15 @@
 </ion-header>
 
 <ion-content>
-	
-	
+	<ion-searchbar class="searchIcon" [(ngModel)]="searchKey"  (ionChange) = "search()" (ionClear)="resetChanges()"></ion-searchbar>
+	<ion-list>
+    <ion-item *ngFor="let ui of publishedUI" (click)="goToDetail(ui)">
+      
+      <ion-label>
+        UI Name: {{ ui.name }}
+      </ion-label>
+      
+      
+    </ion-item>
+  </ion-list>
 </ion-content>

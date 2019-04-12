@@ -133,7 +133,7 @@ export class DataService {
   getPublishedUI(){
     let publishedUI = [];
     this.UIs.forEach((ui) =>{
-      if(ui.publish){
+      if(ui.publish && ui.ownerid != this.getUserID()){ // Check if publish is true and will only show the ones that were not made from User.
         publishedUI.push(ui);
       }
     })
