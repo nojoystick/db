@@ -85,16 +85,37 @@ export class UIDetailViewPage implements OnInit {
 
     await alert.present();
   }
+  async presentFailedAlert() {
+    const alert = await this.alertController.create({
+      header: "Error",
+      message: "This UI is already saved in your home screen!",
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
 
   saveToDB(){
     let randomId = Math.random().toString(36).substr(2, 5);
-    
-    // this.data.UserUIs.forEach((ui)=>{
-    //   console.log(ui);
-    // })
-    console.log(this.UI);
-    // this.data.addToUserCollection(randomId, this.UI.getName());
-    // this.router.navigate(["/tabs/tab1"]);
+    let exist = false;
+    let uniqueid;
+    this.data.UIs.forEach((ui)=>{ // Trying to get the UniqueID, so I'm guessing we are going to add the UI to UserUI collections? 
+      if(this.UI.getName() == ui.name){
+        uniqueid = ui.uniqueid;
+      }
+    })
+    this.data.UserUIs.forEach((ui)=>{
+      if(ui.name == this.UI.getName()){
+        exist = true;
+        this.presentFailedAlert();
+        this.router.navigate(["/tabs/tab1"]);
+        
+      }
+    })
+    if(exist == false){
+      this.data.addToUserCollection(uniqueid, this.UI.getName());
+      this.router.navigate(["/tabs/tab1"]);
+    }
     
   }
   goBack(){
