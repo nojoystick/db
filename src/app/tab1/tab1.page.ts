@@ -33,6 +33,7 @@ user = "";
   {
     this.items = [];
     this.user = data.getUserID();
+    console.log(this.user);
     this.items = data.getUIs(this.user);
   }
 

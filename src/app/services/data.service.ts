@@ -129,6 +129,16 @@ export class DataService {
         })
     return ui;
   }
+
+  getPublishedUI(){
+    let publishedUI = [];
+    this.UIs.forEach((ui) =>{
+      if(ui.publish){
+        publishedUI.push(ui);
+      }
+    })
+    return publishedUI;
+  }
 }
 export const snapshotToArray = snapshot => {
   let returnArr = [];
