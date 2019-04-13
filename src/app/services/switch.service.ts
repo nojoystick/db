@@ -6,12 +6,12 @@ import { ObjectService } from './object.service';
 export class SwitchService extends ObjectService {
 private _onVal;
 
-  constructor( channel:number, offVal:number, onVal:number ) 
+  constructor( channel:number, offVal:number, onVal:number, label:string ) 
   { 
   	var type = "switch";
   	var switchWidth = 1;
   	var switchHeight = 1;
-  	super(type, switchWidth, switchHeight, channel, offVal);
+  	super(type, switchWidth, switchHeight, channel, offVal, label);
   	this._onVal = onVal;
   }
 

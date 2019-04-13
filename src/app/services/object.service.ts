@@ -15,13 +15,15 @@ export class ObjectService {
   private _col: number;
 
   constructor( type:string, width:number, height:number, 
-  	           channel:number, value:number ) 
+  	           channel:number, value:number, label?:string ) 
   { 
   	this._type = type;
     this._width = width;
     this._height = height;
     this._channel = channel;
     this._value = value;
+    if(label != null)
+      this._label = label;
   }
 
   setPos(row:number, col:number)
@@ -51,5 +53,6 @@ export class ObjectService {
   getType(){return this._type;}
   getChannel(){return this._channel;}
   getValue(){return this._value;}
+  getLabel(){return this._label;}
 
 }

@@ -53,6 +53,8 @@ export class UIPage implements OnInit {
         }
       )
 
+    console.log(this.UI.getName());
+
     // if(bleService.peripheral == null) 
     //   bleService.showAlert("No device connected",
     //     "Connect a device in settings to use this UI");
@@ -115,13 +117,14 @@ export class UIPage implements OnInit {
   
   async deletePopup()
   {
-    var data = this.uniqueid;
+    var data = this.UI;
+    var id = this.uniqueid;
     const modal = await this.modalController.create({
       showBackdrop: true,
       backdropDismiss: true,
       cssClass: 'del-modal',
       component: DeleteModalPage,
-      componentProps: { value: data }
+      componentProps: { value: data, id: id }
     });
     return await modal.present();
   }

@@ -120,9 +120,9 @@ export class DataService {
             {
               var obj = data.val().objects[i];
               if(obj._type=="switch")
-                temp.objectFactory(obj._type, obj._row, obj._col, <number>obj._channel, <number>obj._value, <number>obj._value2);
+                temp.objectFactory(obj._type, obj._row, obj._col, <number>obj._channel, <number>obj._value, <string>obj._label, <number>obj._value2);
               else
-                temp.objectFactory(obj._type, obj._row, obj._col, <number>obj._channel, <number>obj._value);
+                temp.objectFactory(obj._type, obj._row, obj._col, <number>obj._channel, <number>obj._value, <string>obj._label);
             }
             ui = temp;
           })

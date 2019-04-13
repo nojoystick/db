@@ -1,39 +1,34 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar class = "hd" >
     <ion-title>Login Page</ion-title>
-
-        <ion-buttons slot="end">
-      <ion-button (click)="signup()">
-Signup      </ion-button>
+    <ion-buttons slot="end">
+    <ion-button class="b" (click)="signup()">Signup</ion-button>
     </ion-buttons>
-
-
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-
-
-
-
-<form [formGroup]="new_item_form" (submit)="login(new_item_form.value)">
-    <ion-item>
+<ion-card class="c">
+<form class="c" [formGroup]="new_item_form" (submit)="login(new_item_form.value)">
+    <ion-item class="c">
       <ion-label color="primary" position="floating">email</ion-label>
-      <ion-input type="text" formControlName="email" required></ion-input>
+      <ion-input class="c" type="text" formControlName="email" required></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item class="c">
       <ion-label color="primary" position="floating">password</ion-label>
-      <ion-input type="password" formControlName="password" required></ion-input>
+      <ion-input class="c" type="password" formControlName="password" required></ion-input>
     </ion-item>
 
     <ion-button class="submit-btn" expand="block" type="submit" [disabled]="!new_item_form.valid">Login</ion-button>
   </form>
+</ion-card>
 
-  <ion-item>
-  	<ion-grid>
-  		<ion-button class="submit-btn" (click)="loginFacebook()">Facebook Login</ion-button>
-  		<ion-button class="submit-btn" (click)="loginGoogle()">Google Login</ion-button>
-  	</ion-grid>
-  </ion-item>
-
+<ion-buttons>
+  <ion-button class="btn" (click)="loginFacebook()">
+  <ion-thumbnail class="tmn" slot="start"><ion-img src="assets/fb.png"></ion-img></ion-thumbnail>Facebook Login
+  </ion-button>
+  <ion-button class="btn" (click)="loginGoogle()">
+  <ion-thumbnail class="tmn" slot="start"><ion-img src="assets/google.png"></ion-img></ion-thumbnail>Google Login
+  </ion-button>
+</ion-buttons>
 </ion-content>

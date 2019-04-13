@@ -78,7 +78,7 @@ export class UIDetailViewPage implements OnInit {
 
   async presentAlert() {
     const alert = await this.alertController.create({
-      header: this.UI.getName()+"'s Description",
+      header: this.UI.getName(),
       message: this.UI.getDescription(),
       buttons: ['OK']
     });

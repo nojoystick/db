@@ -1,22 +1,24 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-button float-left class="hbtn" (click)="goBack()">
+  <ion-toolbar class="hd">
+    <ion-button fill="clear" class="hb" slot="start" (click)="goBack()">
     <ion-icon name="arrow-back"></ion-icon>
     </ion-button>
-    <ion-button float-right class="hbtn" (click)="deletePopup()">
+    <ion-title text-center>{{UI.getName()}}</ion-title>
+    <ion-button fill="clear" slot="end" class="hb" (click)="deletePopup()">
     <ion-icon  name="more"></ion-icon>
     </ion-button>
-        <ion-title text-center>{{UI.getName()}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-<ion-grid fixed>
-  <ion-row style="flex-grow: 0.5" *ngFor = "let row of rows">
+<ion-grid class="grid" fixed>
+  <ion-row style="height:12.5%" *ngFor = "let row of rows">
     <ion-col align-self-stretch *ngFor="let col of cols" size="{{this.sizes[row][col]}}*3">
         <div *ngFor = "let obj of objects">
         <div *ngIf="obj.getRow() == row && obj.getCol() == col">
         <div *ngIf="{type: obj.getType(), channel: obj.getChannel(), value: obj.getValue()}; let v">
+
+        <ion-label>{{obj.getLabel()}}</ion-label><br>
 
     	<ion-range  min="0" max="1024" [(ngModel)] ="this.values[row][col].value" (ionChange)="handler(v.channel, row, col, $event.value)" *ngIf="v.type == 'slider'"></ion-range>
 
@@ -24,7 +26,7 @@
 
         <ion-toggle [(ngModel)] ="this.values[row][col].bool" (ionChange)="handler(v.channel, row, col)" *ngIf="v.type == 'switch'"></ion-toggle>
 
-        <div style="height:100%" *ngIf="v.type == 'spacer'"></div>
+        <div style="height:100%; width:100%" *ngIf="v.type == 'spacer'"></div>
 
         </div>
         </div>

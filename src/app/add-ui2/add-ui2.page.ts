@@ -14,6 +14,12 @@
  * * Home page (Tab1)
  * * AddUI1
  */
+
+// Major bug:
+// Unless you force a reload, only the first
+//   object you create since login will be saved
+
+
 import { UIService } from '../services/ui.service';
 import { ObjectService } from '../services/object.service';
 import { Component, OnInit } from '@angular/core';
@@ -53,16 +59,13 @@ export class AddUI2Page implements OnInit {
   constructor(public db: AngularFirestore, public router:Router, private dragulaService: DragulaService, private toastController: ToastController, private alertCtrl: AlertController, private activatedRoute: ActivatedRoute, private dataService: DataService) {
     this.ui1_data = this.activatedRoute.snapshot.params;
     
-    this.objects.push(new ButtonService(0, 0));
-    this.objects.push(new SwitchService(0, 0, 0));
-    this.objects.push(new SliderService(0, 0));
+    this.objects.push(new ButtonService(0, 0, ""));
+    this.objects.push(new SwitchService(0, 0, 0, ""));
+    this.objects.push(new SliderService(0, 0, ""));
 
     
     this.UI = new UIService(this.ui1_data.name, this.ui1_data.description, this.ui1_data.publish);
 
-    this.dragulaService.createGroup("trash", {
-
-    })
     this.dragulaService.createGroup("items", {
       removeOnSpill: true,
       copy: (el, source) => {
@@ -178,6 +181,12 @@ export class AddUI2Page implements OnInit {
           type: 'number',
           value: '',
           placeholder: 'Value'
+        },
+        {
+          name: 'Label',
+          type: 'text',
+          value: '',
+          placeholder: 'Label'
         }
       ],
       buttons: [
@@ -185,11 +194,12 @@ export class AddUI2Page implements OnInit {
           text: 'Ok',
           handler: (data) => {
             console.log('Confirm Ok');
-            this.findAndRemoveByID(randomId);
-            this.currObjectContainer.push({id:randomId, type: type, row: row, col: col, channel: data.Channel, value: data.Value});
+            //this.findAndRemoveByID(randomId);
+            this.currObjectContainer.push({id:randomId, type: type, row: row, col: col, channel: data.Channel, value: data.Value, label: data.Label});
           }
         }
-      ]
+      ],
+      cssClass: 'i'
     });
     await alert.present();
   }
@@ -214,6 +224,12 @@ export class AddUI2Page implements OnInit {
           type: 'number',
           value: '',
           placeholder: 'Value2'
+        },
+        {
+          name: 'Label',
+          type: 'text',
+          value: '',
+          placeholder: 'Label'
         }
       ],
       buttons: [
@@ -222,11 +238,12 @@ export class AddUI2Page implements OnInit {
           handler: (data) => {
             console.log('Confirm Ok');
             //delete old if it exists
-            this.findAndRemoveByID(randomId);
-            this.currObjectContainer.push({id:randomId, type: type, row: row, col: col, channel: data.Channel, value: data.Value, value2: data.Value2});
+            //this.findAndRemoveByID(randomId);
+            this.currObjectContainer.push({id:randomId, type: type, row: row, col: col, channel: data.Channel, value: data.Value, value2: data.Value2, label:data.Label});
           }
         }
-      ]
+      ],
+      cssClass:'i'
     });
     await alert.present();
   }
@@ -234,7 +251,9 @@ export class AddUI2Page implements OnInit {
   ngOnDestroy() {
     this.dragulaService.destroy("items");
     this.currObjectContainer = [];
-}
+  }
+
+  
   ngOnInit() {
   }
 
@@ -246,11 +265,11 @@ export class AddUI2Page implements OnInit {
     console.log(this.currObjectContainer);
     this.currObjectContainer.forEach(data=>{
       if(data.type == "switch"){
-        this.UI.objectFactory(data.type, data.row, data.col, data.channel, data.value, data.value2);
+        this.UI.objectFactory(data.type, data.row, data.col, data.channel, data.value, data.label, data.value2);
         console.log("making a switch");
       }
       else{
-        this.UI.objectFactory(data.type, data.row, data.col, data.channel, data.value);
+        this.UI.objectFactory(data.type, data.row, data.col, data.channel, data.value, data.label);
         console.log("making a "+data.type);
       }
     })

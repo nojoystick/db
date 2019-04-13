@@ -30,7 +30,7 @@ NUM_COLS:number = 4;
     //default: fill with spacers
     for(var i = 1; i <= this.NUM_ROWS; i++)
       for(var j = 1; j <= this.NUM_COLS; j++)
-        this.objectFactory("spacer", i, j, 1, 1);
+        this.objectFactory("spacer", i, j, 1, 1, "");
   }
 
   addObject(obj:ObjectService, row:number, col:number)
@@ -57,20 +57,20 @@ NUM_COLS:number = 4;
     }
   }
 
-  objectFactory(type:string, row:number, col:number, channel:number, value:number, value2?:number)
+  objectFactory(type:string, row:number, col:number, channel:number, value:number, label:string, value2?:number)
   {
     var obj:ObjectService;
 
     switch(type)
     {
       case("switch"):
-          obj = new SwitchService(channel, value, value2);
+          obj = new SwitchService(channel, value, value2, label);
       break;
       case("slider"):
-          obj = new SliderService(channel, value);
+          obj = new SliderService(channel, value, label);
       break;
     	case("button"):
-        obj = new ButtonService(channel, value);
+        obj = new ButtonService(channel, value, label);
     	break;
     	case("spacer"):
         // channel and value here are used for width/height

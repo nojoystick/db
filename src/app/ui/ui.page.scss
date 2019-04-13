@@ -1,6 +1,5 @@
-.hbtn{
-	--background: #ffffff;
-	--color: var(--ion-color-primary);
-	--border-style:none;
-	--box-shadow:none;
+.grid{
+    height: 90%;
+    display: flex;
+    flex-flow: column;
 }

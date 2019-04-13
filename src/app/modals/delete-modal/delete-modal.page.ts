@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NavController, ModalController, NavParams } from '@ionic/angular';
+import { NavController, ModalController, NavParams, AlertController } from '@ionic/angular';
 import { DataService } from '../../services/data.service'
 import { Router } from '@angular/router';
 
@@ -11,13 +11,18 @@ import { Router } from '@angular/router';
 
 export class DeleteModalPage implements OnInit {
 value:any;
+id:any;
   constructor(private nav:NavController,
               private navParams:NavParams, 
   	          private modalController: ModalController,
   	          private data: DataService,
-  	          private router: Router) 
+  	          private router: Router,
+              private alertController: AlertController) 
   {
     this.value = this.navParams.get('value');
+    this.id = this.navParams.get('id');
+    console.log(this.id);
+    console.log(this.value);
   }
 
   ngOnInit() {}
@@ -28,7 +33,7 @@ value:any;
   {
     //this.data.deleteUI(currentItem);
     this.closeModal();
-    this.data.deleteById(this.value);
+    this.data.deleteById(this.id);
     this.router.navigate(['/tabs/tab1']);
   }
 
@@ -38,8 +43,15 @@ value:any;
   	//TODO: edit options: name, published
   }
 
-  infoPage()
+  async infoPage()
   {
-  	//TODO: view detail info here
+    const alert = await this.alertController.create({
+      header: this.value._name,
+      message: this.value._description,
+      buttons: ['OK'],
+      cssClass: "alert"
+    });
+
+    await alert.present();
   }
 }

@@ -33,7 +33,7 @@ export class Tab2Page {
   
   ngOnInit(){
     this.publishedUI = this.dataService.getPublishedUI(); 
-    this.userID = this.dataService.getUserID;
+    this.userID = this.dataService.getUserID();
     // console.log(this.publishedUI);
 
   }
