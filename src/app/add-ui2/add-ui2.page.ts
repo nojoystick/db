@@ -60,23 +60,21 @@ export class AddUI2Page implements OnInit {
     
     this.UI = new UIService(this.ui1_data.name, this.ui1_data.description, this.ui1_data.publish);
 
+    this.dragulaService.createGroup("trash", {
 
+    })
     this.dragulaService.createGroup("items", {
+      removeOnSpill: true,
       copy: (el, source) => {
-        
-        
         this.iontype = el.tagName;
-        this.isDropped = false;
-        
+        this.isDropped = false; 
         return source.id === 'fab';
       },
       accepts: (el, target, source, sibling) => {
-        // To avoid dragging from right to left container
-        
+        // To avoid dragging from right to left container 
         return target.id !== 'fab';
       }
     });
-    
     this.subs.add(dragulaService.drop("items")
       .subscribe(({ el, target }) => {
       
@@ -133,10 +131,37 @@ export class AddUI2Page implements OnInit {
         }
       }
       })
-      
     );
 
-    
+    this.dragulaService.drag("items")
+    .subscribe(({ el }) => {
+      this.hide = false;
+    });
+
+    this.dragulaService.remove("items")
+    .subscribe(({ el }) => {
+      this.findAndRemove(el);
+      });
+   }
+
+   findAndRemove(el)
+   {
+     for(var i = 0; i < this.currObjectContainer.length; i++)
+      {
+        if(el.getAttribute("tag") == this.currObjectContainer[i].id){ 
+          delete this.currObjectContainer[i];
+        }
+      }
+   }
+
+   findAndRemoveByID(id)
+   {
+      for(var i = 0; i < this.currObjectContainer.length; i++)
+      {
+        if(id == this.currObjectContainer[i].id){ 
+          delete this.currObjectContainer[i];
+        }
+      }
    }
   
    async presentAlertPrompt(randomId:number, type:string, row:number, col:number) {
@@ -145,28 +170,22 @@ export class AddUI2Page implements OnInit {
       inputs: [
         {
           name: 'Channel',
-          type: 'text',
+          type: 'number',
           placeholder: 'Channel'
         },
         {
           name: 'Value',
-          type: 'text',
+          type: 'number',
           value: '',
           placeholder: 'Value'
         }
       ],
       buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-            console.log('Confirm Cancel');
-          }
-        }, {
+      {
           text: 'Ok',
           handler: (data) => {
             console.log('Confirm Ok');
+            this.findAndRemoveByID(randomId);
             this.currObjectContainer.push({id:randomId, type: type, row: row, col: col, channel: data.Channel, value: data.Value});
           }
         }
@@ -181,35 +200,29 @@ export class AddUI2Page implements OnInit {
       inputs: [
         {
           name: 'Channel',
-          type: 'text',
+          type: 'number',
           placeholder: 'Channel'
         },
         {
           name: 'Value',
-          type: 'text',
+          type: 'number',
           value: '',
           placeholder: 'Value1'
         },
         {
           name: 'Value2',
-          type: 'text',
+          type: 'number',
           value: '',
           placeholder: 'Value2'
         }
       ],
       buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-            console.log('Confirm Cancel');
-          }
-        }, {
+      {
           text: 'Ok',
           handler: (data) => {
             console.log('Confirm Ok');
-            
+            //delete old if it exists
+            this.findAndRemoveByID(randomId);
             this.currObjectContainer.push({id:randomId, type: type, row: row, col: col, channel: data.Channel, value: data.Value, value2: data.Value2});
           }
         }
@@ -220,9 +233,9 @@ export class AddUI2Page implements OnInit {
 
   ngOnDestroy() {
     this.dragulaService.destroy("items");
+    this.currObjectContainer = [];
 }
   ngOnInit() {
-    this.currObjectContainer = [];
   }
 
   goBack(){
@@ -244,7 +257,6 @@ export class AddUI2Page implements OnInit {
     console.log(this.UI.getObjects());
     this.UI.setOwnerID(this.dataService.getUserID());
     this.dataService.pushToFirebase(this.UI);
-    console.log("Added to database successfully!");
     this.router.navigate(['/tabs/tab1']);
   }
 

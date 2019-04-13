@@ -40,14 +40,13 @@ user = "";
     
     events.subscribe('dataloaded', (time) => {
       this.items = [];
-      this.items = data.getUIs(this.user);
+      this.items = this.data.getUIs(this.user);
       });
   }
 
   openUIPage(item){
     this.router.navigate(["/ui", item]);
   }
-
 
   addUI(){ this.router.navigate(["/add-ui1"]); }
 

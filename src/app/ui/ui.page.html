@@ -12,7 +12,7 @@
 
 <ion-content>
 <ion-grid fixed>
-  <ion-row *ngFor = "let row of rows">
+  <ion-row style="flex-grow: 0.5" *ngFor = "let row of rows">
     <ion-col align-self-stretch *ngFor="let col of cols" size="{{this.sizes[row][col]}}*3">
         <div *ngFor = "let obj of objects">
         <div *ngIf="obj.getRow() == row && obj.getCol() == col">
