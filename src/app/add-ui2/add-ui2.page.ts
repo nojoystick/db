@@ -251,6 +251,7 @@ export class AddUI2Page implements OnInit {
   ngOnDestroy() {
     this.dragulaService.destroy("items");
     this.currObjectContainer = [];
+    this.subs.unsubscribe();
   }
 
   
