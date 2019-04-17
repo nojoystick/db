@@ -118,7 +118,7 @@ void parseCandV(String rx)
   int c = rx.substring(0, pos).toInt();
   int v = rx.substring(pos+1).toInt();
   //scale down slider val from 0-1024 to 0-18
-  if(c>2)
+  if(c > 2 && c < 6)
     v = (int) (v / 57);
 
   //toggle the switch value

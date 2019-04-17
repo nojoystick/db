@@ -110,6 +110,7 @@ export class UIPage implements OnInit {
       //slider
       else{ value = tempValue.value; }
     }
+    console.log("C: "+channel+"v: "+value);
     this.bleService.pack(channel, value);
   }
 

@@ -27,12 +27,15 @@ NUM_COLS:number = 4;
     this._name = name;
     this._description = description;
     this._isPublic = isPublic;
+    this.dumpObjects();
+  }
+  dumpObjects()
+  {
     //default: fill with spacers
     for(var i = 1; i <= this.NUM_ROWS; i++)
       for(var j = 1; j <= this.NUM_COLS; j++)
         this.objectFactory("spacer", i, j, 1, 1, "");
   }
-
   addObject(obj:ObjectService, row:number, col:number)
   {
     //overwrite old object at this position
