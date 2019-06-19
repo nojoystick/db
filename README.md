@@ -10,4 +10,6 @@ db is an IoT app that allows users to control microcontroller projects remotely 
 <li>searchable database of UIs created by other users/vendors   </li>
 <li>simple configuration - connect to your device with bluetooth</li>
 
+## [demo](https://www.youtube.com/watch?v=flKA6NBQGys)
+
 ## [example projects](https://github.com/dallinw/db/blob/master/examples)
